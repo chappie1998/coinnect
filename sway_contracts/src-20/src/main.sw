@@ -31,7 +31,7 @@ storage {
 
 abi FRC20 {
     #[storage(read, write)]
-    fn constructor(decimals: u8, name: str[10], symbol: str[3], supply: u64, recipient: Address);
+    fn constructor(name: str[10], symbol: str[3], decimals: u8,  supply: u64, recipient: Address);
 
     #[storage(read)]
     fn get_token() -> Token;
@@ -51,7 +51,7 @@ abi FRC20 {
 
 impl FRC20 for Contract {
     #[storage(read, write)]
-    fn constructor(decimals: u8, name: str[10], symbol: str[3], supply: u64, recipient: Address) {
+    fn constructor(name: str[10], symbol: str[3], decimals: u8,  supply: u64, recipient: Address) {
         assert(!storage.initialized.read());
         let token = Token {
             name: name,

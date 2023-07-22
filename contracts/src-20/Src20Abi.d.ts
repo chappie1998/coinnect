@@ -39,7 +39,7 @@ interface Src20AbiInterface extends Interface {
     withdraw_balance: FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: 'constructor', values: [BigNumberish, string, string, BigNumberish, AddressInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'constructor', values: [string, string, BigNumberish, BigNumberish, AddressInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'decimals', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'get_token', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'name', values: []): Uint8Array;
@@ -61,7 +61,7 @@ interface Src20AbiInterface extends Interface {
 export class Src20Abi extends Contract {
   interface: Src20AbiInterface;
   functions: {
-    constructor: InvokeFunction<[decimals: BigNumberish, name: string, symbol: string, supply: BigNumberish, recipient: AddressInput], void>;
+    constructor: InvokeFunction<[name: string, symbol: string, decimals: BigNumberish, supply: BigNumberish, recipient: AddressInput], void>;
     decimals: InvokeFunction<[], number>;
     get_token: InvokeFunction<[], TokenOutput>;
     name: InvokeFunction<[], string>;

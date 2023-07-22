@@ -112,11 +112,6 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "decimals",
-          "type": 8,
-          "typeArguments": null
-        },
-        {
           "name": "name",
           "type": 2,
           "typeArguments": null
@@ -124,6 +119,11 @@ const _abi = {
         {
           "name": "symbol",
           "type": 3,
+          "typeArguments": null
+        },
+        {
+          "name": "decimals",
+          "type": 8,
           "typeArguments": null
         },
         {

@@ -6,10 +6,7 @@ pub struct PoolBalance {
 }
 
 impl PoolBalance {
-    pub fn new(
-        selling_asset: u64,
-        buying_asset: u64,
-    ) -> Self {
+    pub fn new(selling_asset: u64, buying_asset: u64) -> Self {
         PoolBalance {
             selling_asset,
             buying_asset,

@@ -3,7 +3,8 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { Src20Abi__factory } from "@/contracts/src-20";
-import { Wallet } from "fuels";
+import { BN, NativeAssetId, Wallet } from "fuels";
+import { LaunchpadAbi__factory } from "@/contracts/launchpad";
 
 export default function Home() {
   // const wallet = Wallet.fromPrivateKey(
@@ -13,7 +14,7 @@ export default function Home() {
   // const admin =
   //   "0xfec21894a55b54b3dd89ab836856403d20f20d2af3694e13e64a32b3e1d41f0a";
   // const account = Wallet.fromAddress(
-  //   "fuel1wlmnq4cpuq5savtp9njlzt8kkrf2f27za0fzgumsgadfldxngm2qyf8ada"
+  //   "fuel1dd3cqn8mlxzku689kmn6au3cmjp3rmz4hmqymam5qqaze9hqgx8qtjpwn9"
   // );
   // console.log(account.address.toB256());
 
@@ -28,8 +29,17 @@ export default function Home() {
   //   wallet
   // );
 
-  const contract = Src20Abi__factory.connect(
-    "0xb5e5b8a8c213decc256bdb86efeca25688cac27e46feebd23b4fa9026cd11782",
+  console.log(
+    "block:- ",
+    wallet.provider.getBlockNumber().then((data) => data)
+  );
+
+  const contractId =
+    "0xccd539378bdbd3e76ff74649805805740bb4573609dc208a25b1869a9c4e7402";
+  const contract = Src20Abi__factory.connect(contractId, wallet);
+
+  const launchpadContract = LaunchpadAbi__factory.connect(
+    "0x876227337bd41de63ac21d5314bbad6719593877502cd0d3a5badc3bb06654ed",
     wallet
   );
 
@@ -42,10 +52,66 @@ export default function Home() {
   const callConstructor = async () => {
     console.log("some1 start");
     const lol = await contract.functions
-      .constructor(9, "coinnect  ", "CONT", 1000, { value: admin })
+      .constructor("COIN TOKEN", "COIN", 9, 10000 * 1e9, { value: admin })
       .txParams({ gasPrice: 1 })
       .call();
     console.log("some1", lol);
+  };
+
+  const create_pool = async () => {
+    console.log("create_pool start");
+    // let asset =
+    //   "0xccd539378bdbd3e76ff74649805805740bb4573609dc208a25b1869a9c4e7402";
+    // const nativeAsset = NativeAssetId;
+    const hardCap = 1000 * 1e9;
+    const create_pool = await launchpadContract.functions
+      .create_pool(
+        { value: contractId },
+        { value: NativeAssetId },
+        10,
+        1 * 1e9,
+        hardCap,
+        0.01 * 1e9,
+        0.1 * 1e9,
+        2,
+        50
+      )
+      .txParams({ gasPrice: 1 })
+      .callParams({
+        forward: [hardCap, contractId],
+      })
+      .call();
+    console.log("create_pool", create_pool);
+  };
+
+  const buy_token = async () => {
+    console.log("block:- ", Number(await wallet.provider.getBlockNumber()));
+    console.log("buy_token start");
+    const amount = 0.02 * 1e9;
+    const buy_token = await launchpadContract.functions
+      .buy_token(0, amount)
+      .txParams({ gasPrice: 1 })
+      .callParams({
+        forward: [amount, NativeAssetId],
+      })
+      .call();
+    console.log("buy_token", buy_token);
+  };
+
+  const get_pool = async () => {
+    console.log("get_pool start");
+    const get_pool = await launchpadContract.functions.get_pool(0).get();
+    console.log("name", get_pool);
+  };
+
+  const get_pool_balance = async () => {
+    console.log("get_pool_balance start");
+    const get_pool_balance = await launchpadContract.functions
+      .get_pool_balance(0)
+      .get();
+    console.log("name", get_pool_balance);
+    console.log("selling", Number(get_pool_balance.value?.selling_asset) / 1e9);
+    console.log("buying", Number(get_pool_balance.value?.buying_asset) / 1e9);
   };
 
   return (
@@ -54,6 +120,14 @@ export default function Home() {
         <button onClick={callConstructor}>callConstructor</button>
         <br />
         <button onClick={get_token}>get_token</button>
+        <br />
+        <button onClick={create_pool}>create_pool</button>
+        <br />
+        <button onClick={get_pool}>get_pool</button>
+        <br />
+        <button onClick={get_pool_balance}>get_pool_balance</button>
+        <br />
+        <button onClick={buy_token}>buy_token</button>
       </div>
     </main>
   );

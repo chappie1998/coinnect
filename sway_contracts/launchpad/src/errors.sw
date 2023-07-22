@@ -12,10 +12,13 @@ pub enum InputError {
     HardCapCannotBeLessThanSoftCap: (),
     MinimumBuyCannotBeZero: (),
     MaximumBuyCannotBeLessThanMinimumBuy: (),
+    BuyAmountCannotBeLessThanMinimumBuy: (),
+    BuyAmountCannotBeGreaterThanMaximumBuy: (),
     StartBlockCannotBeLessThanCurrentBlock: (),
     EndBlockCannotBeLessThanStartBlock: (),
     IncorrectAmountProvided: (),
     IncorrectAssetProvided: (),
     PoolDoesNotExist: (),
     NotEnoughTokensToBuy: (),
+    PoolExpired: (),
 }
