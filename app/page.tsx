@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import styles from "./page.module.css";
 import { Src20Abi__factory } from "@/contracts/src-20";
 import { BN, NativeAssetId, Wallet } from "fuels";
 import { LaunchpadAbi__factory } from "@/contracts/launchpad";
+import { useRouter } from 'next/navigation'
+import Header from "./component/header";
 
 export default function Home() {
   // const wallet = Wallet.fromPrivateKey(
@@ -114,9 +114,25 @@ export default function Home() {
     console.log("buying", Number(get_pool_balance.value?.buying_asset) / 1e9);
   };
 
+
+
+  const router = useRouter()
+   
   return (
-    <main className={styles.main}>
-      <div>
+    <main className="h-screen w-full bg-neutral-800 rocket">
+      <Header></Header>
+      <div className="w-full h-[50vh] flex justify-center items-end flex-col space-y-10">
+        <div className="space-y-5 w-[40%] flex flex-col justify-center">
+          <h1 className="font-mpro text-6xl bg-clip-text tracking-wide text-white mb-10">
+          The future <br /> of launchpad <br /> on fuel
+          </h1>
+          <a className="font-mpro w-fit cursor-pointer border text-white rounded-full border-white p-2 hover:bg-white hover:text-neutral-800 transition duration-300 hover:ease-in" onClick={() => router.push('/launchpad/token/create')}>
+            Token Launchpad
+            </a>
+        </div>
+      </div>
+
+      <div className="hidden">
         <button onClick={callConstructor}>callConstructor</button>
         <br />
         <button onClick={get_token}>get_token</button>
