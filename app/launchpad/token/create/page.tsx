@@ -68,7 +68,7 @@ export default function create() {
     const buff: BytesLike = buffer.Buffer.from(byteCode);
 
     // load the JSON abi of the contract, generated from Sway source
-    const abi: ABI = require("/sway_contracts/src-20/out/debug/src-20-abi.json");
+    const abi: ABI = ""
     console.log(abi);
 
     // const buff = fs.readFileSync(binFile);
@@ -86,7 +86,7 @@ export default function create() {
   return (
     <div className="h-screen w-full bgform">
       <Header></Header>
-      <div className="w-full flex justify-center items-center pt-10 font-mpro">
+      <div className="w-full h-full flex justify-center items-center pt-10 font-mpro">
         <div className="w-fit bg-white rounded-md flex flex-col p-5 justify-end items-center border border-white">
           <h1 className="text-3xl w-full text-center border-b border-neutral-800 mb-5 pb-2">Token launchpad (preview)</h1>
           <div className="flex items-center w-full mb-5 space-x-5">

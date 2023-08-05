@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 export default function Header() {
   const router = useRouter()
     return (
-        <header className="h-20 flex justify-center items-center bg-neutral-900 ">
+        <header className="h-20 w-full flex justify-center items-center bg-neutral-900 absolute z-10">
         <nav className="w-full flex">
           <div 
           onClick={() => router.push('/')}

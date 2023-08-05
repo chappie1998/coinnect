@@ -5,6 +5,8 @@ import { BN, NativeAssetId, Wallet } from "fuels";
 import { LaunchpadAbi__factory } from "@/contracts/launchpad";
 import { useRouter } from 'next/navigation'
 import Header from "./component/header";
+import Image from 'next/image'
+import gif from "./assets/rocket_3.gif"
 
 export default function Home() {
   // const wallet = Wallet.fromPrivateKey(
@@ -119,12 +121,19 @@ export default function Home() {
   const router = useRouter()
    
   return (
-    <main className="h-screen w-full bg-neutral-800 rocket">
+    <main className="h-screen w-full bgform">
       <Header></Header>
-      <div className="w-full h-[50vh] flex justify-center items-end flex-col space-y-10">
+      <div className="w-full h-full flex justify-center items-center space-y-10 space-x-10">
+        <Image
+            src={gif}
+            alt="gif"
+            width={500}
+            height={500}
+            className=""
+          />
         <div className="space-y-5 w-[40%] flex flex-col justify-center">
           <h1 className="font-mpro text-6xl bg-clip-text tracking-wide text-white mb-10">
-          The future <br /> of launchpad <br /> on fuel
+          Your ERC-20 <br /> launchpad <br /> on Fuel
           </h1>
           <a className="font-mpro w-fit cursor-pointer border text-white rounded-full border-white p-2 hover:bg-white hover:text-neutral-800 transition duration-300 hover:ease-in" onClick={() => router.push('/launchpad/token/create')}>
             Token Launchpad
