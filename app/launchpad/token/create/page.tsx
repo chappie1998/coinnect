@@ -1,5 +1,6 @@
 "use client";
 
+import Header from "@/app/component/header";
 import { Src20Abi__factory } from "@/contracts/src-20";
 import { ABI, BytesLike, ContractFactory, Wallet } from "fuels";
 import { useRef, useState } from "react";
@@ -67,7 +68,7 @@ export default function create() {
     const buff: BytesLike = buffer.Buffer.from(byteCode);
 
     // load the JSON abi of the contract, generated from Sway source
-    const abi: ABI = require("/sway_contracts/src-20/out/debug/src-20-abi.json");
+    const abi: ABI = ""
     console.log(abi);
 
     // const buff = fs.readFileSync(binFile);
@@ -83,34 +84,37 @@ export default function create() {
     setContractID(contract.id.toB256());
   };
   return (
-    <div className="container py-6">
-      <div className="ant-card ant-card-bordered">
-        <div className="has-text-centered mt-6 mb-4">
-          {contractId ? (
-            <button type="button" className="ant-btn ant-btn-primary" disabled>
-              <span>Contract Deployed</span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="ant-btn ant-btn-primary"
-              onClick={deployContract}
-            >
-              <span>Deploy Contract</span>
-            </button>
-          )}
-        </div>
-        <div className="ant-card-body">
-          <form ref={formRef}>
-            <p className="has-text-primary is-size-7">(*) is required field.</p>
-            <div className="field">
-              <label htmlFor="tokenType" className="label">
-                Token Type<sup className="has-text-danger">*</sup>
-              </label>
-              <div className="control">
-                <select name="tokenType" id="tokenType" className="input">
-                  <option value="standard">Standard Token</option>
-                  {/* <option value="liquidity" disabled>
+    <div className="h-screen w-full bgform">
+      <Header></Header>
+      <div className="w-full h-full flex justify-center items-center pt-10 font-mpro">
+        <div className="w-fit bg-white rounded-md flex flex-col p-5 justify-end items-center border border-white">
+          <h1 className="text-3xl w-full text-center border-b border-neutral-800 mb-5 pb-2">Token launchpad (preview)</h1>
+          <div className="flex items-center w-full mb-5 space-x-5">
+            <h1 className="text-xl font-bold">Deploy the contract</h1>
+            {contractId ? (
+              <button type="button" className="p-2 border border-neutral-800 rounded-full bg-emerald-500" disabled>
+                <span>Contract Deployed</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="p-2 border border-neutral-800 rounded-full hover:bg-neutral-800 hover:text-white transition duration-300 hover:ease-in"
+                onClick={deployContract}
+              >
+                <span>Deploy Contract</span>
+              </button>
+            )}
+          </div>
+          <div className="mx-40 w-full">
+            <form ref={formRef} className="space-y-5 w-[80%]">
+              <div className="w-full flex space-x-10 items-center">
+                <label htmlFor="tokenType" className="text-xl font-bold">
+                  Token Type<sup className="text-red-500">*</sup>
+                </label>
+                <div className="control">
+                  <select name="tokenType" id="tokenType" className="input border rounded-md p-2 border-neutral-800" required>
+                    <option value="standard">Standard Token</option>
+                    {/* <option value="liquidity" disabled>
                   Liquidity Generator Token
                 </option>
                 <option value="baby" disabled>
@@ -119,77 +123,76 @@ export default function create() {
                 <option value="buyback" disabled>
                   Buyback Baby Token
                 </option> */}
-                </select>
-                <p className="help is-info"> 30 MATIC</p>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="field">
-              <label htmlFor="tokenName" className="label">
-                Name<sup className="has-text-danger">*</sup>
-              </label>
-              <div className="control">
-                <input
-                  type="text"
-                  className="input"
-                  id="tokenName"
-                  name="tokenName"
-                  placeholder="Ex: FUEL TOKEN"
-                  maxLength={255}
-                  required
-                />
+              <div className="w-full flex flex-col">
+                <label htmlFor="tokenName" className="text-xl font-bold">
+                  Name<sup className="text-red-500">*</sup>
+                </label>
+                <div className="control">
+                  <input
+                    type="text"
+                    className="w-full border rounded-md p-1 border-neutral-800"
+                    id="tokenName"
+                    name="tokenName"
+                    placeholder="Token Name"
+                    maxLength={255}
+                    required
+                  />
+                </div>
               </div>
-            </div>
-            <div className="field">
-              <label htmlFor="tokenSymbol" className="label">
-                Symbol<sup className="has-text-danger">*</sup>
-              </label>
-              <div className="control">
-                <input
-                  type="text"
-                  className="input"
-                  id="tokenSymbol"
-                  name="tokenSymbol"
-                  placeholder="Ex: FUEL"
-                  maxLength={255}
-                  required
-                />
+              <div className="w-full flex flex-col">
+                <label htmlFor="tokenSymbol" className="text-xl font-bold">
+                  Symbol<sup className="text-red-500">*</sup>
+                </label>
+                <div className="control">
+                  <input
+                    type="text"
+                    className="w-full border rounded-md p-1 border-neutral-800"
+                    id="tokenSymbol"
+                    name="tokenSymbol"
+                    placeholder="FUEL"
+                    maxLength={255}
+                    required
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="field">
-              <label htmlFor="tokenDecimals" className="label">
-                Decimals<sup className="has-text-danger">*</sup>
-              </label>
-              <div className="control">
-                <input
-                  type="number"
-                  className="input"
-                  id="tokenDecimals"
-                  name="tokenDecimals"
-                  placeholder="Ex: 9"
-                  max={9}
-                  min={1}
-                  required
-                />
+              <div className="w-full flex flex-col">
+                <label htmlFor="tokenDecimals" className="text-xl font-bold">
+                  Decimals<sup className="text-red-500">*</sup>
+                </label>
+                <div className="control">
+                  <input
+                    type="number"
+                    className="w-full border rounded-md p-1 border-neutral-800"
+                    id="tokenDecimals"
+                    name="tokenDecimals"
+                    placeholder="9"
+                    max={9}
+                    min={1}
+                    required
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="field">
-              <label htmlFor="totalSupply" className="label">
-                Total supply<sup className="has-text-danger">*</sup>
-              </label>
-              <div className="control">
-                <input
-                  type="text"
-                  className="input"
-                  id="totalSupply"
-                  name="totalSupply"
-                  placeholder="Ex: 100000000000"
-                  required
-                />
+              <div className="w-full flex flex-col">
+                <label htmlFor="totalSupply" className="text-xl font-bold">
+                  Total supply<sup className="text-red-500">*</sup>
+                </label>
+                <div className="control">
+                  <input
+                    type="text"
+                    className="w-full border rounded-md p-1 border-neutral-800"
+                    id="totalSupply"
+                    name="totalSupply"
+                    placeholder="100000000000"
+                    required
+                  />
+                </div>
               </div>
-            </div>
-            {/* <div className="field">
+              {/* <div className="field">
               <label className="ant-checkbox-wrapper">
                 <span className="ant-checkbox">
                   <input
@@ -202,16 +205,32 @@ export default function create() {
                 <span>Implement Pink Anti-Bot System?</span>
               </label>
             </div> */}
-            <div className="has-text-centered mt-6 mb-4">
-              <button
+              <div className="has-text-centered mt-6 mb-4">
+              {contractId ? (
+                <button
                 type="button"
                 onClick={callConstructor}
-                className="ant-btn ant-btn-primary"
+                className="p-2 border border-neutral-800 rounded-full hover:bg-neutral-800 hover:text-white transition duration-300 hover:ease-in"
               >
                 <span>Create token</span>
               </button>
-            </div>
-          </form>
+              ) : (
+                <div className="flex flex-col w-fit">
+                  <button
+                  disabled
+                  aria-disabled
+                  type="button"
+                  onClick={callConstructor}
+                  className="p-2 border border-gray-200 text-gray-200 rounded-full"
+                >
+                  <span>Create token</span>
+                </button>
+                <span className="text-red-500 mt-5">Your need to deploy the contract first !</span>
+                </div>
+              ) }
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
