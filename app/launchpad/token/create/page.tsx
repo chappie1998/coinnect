@@ -2,6 +2,7 @@
 
 import Header from "@/app/component/header";
 import { Src20Abi__factory } from "@/contracts/src-20";
+import { getWallet } from "@/utils/useFuel";
 import { ABI, BytesLike, ContractFactory, Wallet } from "fuels";
 import { useRef, useState } from "react";
 // import fs from "node:fs";
@@ -17,11 +18,11 @@ export default function create() {
   // const [contractDeployed, setContractDeployed] = useState(false);
   const [contractId, setContractID] = useState<string>();
 
-  const wallet = Wallet.fromPrivateKey(
-    "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
-  );
-  const admin =
-    "0x6b63804cfbf9856e68e5b6e7aef238dc8311ec55bec04df774003a2c96e0418e";
+  // const wallet = Wallet.fromPrivateKey(
+  //   "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
+  // );
+  // const admin =
+  //   "0x6b63804cfbf9856e68e5b6e7aef238dc8311ec55bec04df774003a2c96e0418e";
 
   // const contract = Src20Abi__factory.connect(
   //   "0xb5e5b8a8c213decc256bdb86efeca25688cac27e46feebd23b4fa9026cd11782",
@@ -43,11 +44,13 @@ export default function create() {
       console.log(tokenName, tokenSymbol, tokenDecimals, totalSupply);
 
       // try {
+      const wallet = await getWallet();
+
       const contract = Src20Abi__factory.connect(contractId, wallet);
       console.log(contract);
       const constructor = await contract.functions
         .constructor(tokenName, tokenSymbol, tokenDecimals, totalSupply, {
-          value: admin,
+          value: wallet.address.toB256(),
         })
         .txParams({ gasPrice: 1 })
         .call();
@@ -68,12 +71,14 @@ export default function create() {
     const buff: BytesLike = buffer.Buffer.from(byteCode);
 
     // load the JSON abi of the contract, generated from Sway source
-    const abi: ABI = ""
+    const abi: ABI = require("/sway_contracts/src-20/out/debug/src-20-abi.json");
     console.log(abi);
 
     // const buff = fs.readFileSync(binFile);
 
     // send byteCode and ABI to ContractFactory to load
+    const wallet = await getWallet();
+
     const factory = new ContractFactory(buff, abi, wallet);
     console.log(factory);
 
@@ -88,11 +93,17 @@ export default function create() {
       <Header></Header>
       <div className="w-full h-full flex justify-center items-center pt-10 font-mpro">
         <div className="w-fit bg-white rounded-md flex flex-col p-5 justify-end items-center border border-white">
-          <h1 className="text-3xl w-full text-center border-b border-neutral-800 mb-5 pb-2">Token launchpad (preview)</h1>
+          <h1 className="text-3xl w-full text-center border-b border-neutral-800 mb-5 pb-2">
+            Token launchpad (preview)
+          </h1>
           <div className="flex items-center w-full mb-5 space-x-5">
             <h1 className="text-xl font-bold">Deploy the contract</h1>
             {contractId ? (
-              <button type="button" className="p-2 border border-neutral-800 rounded-full bg-emerald-500" disabled>
+              <button
+                type="button"
+                className="p-2 border border-neutral-800 rounded-full bg-emerald-500"
+                disabled
+              >
                 <span>Contract Deployed</span>
               </button>
             ) : (
@@ -112,7 +123,12 @@ export default function create() {
                   Token Type<sup className="text-red-500">*</sup>
                 </label>
                 <div className="control">
-                  <select name="tokenType" id="tokenType" className="input border rounded-md p-2 border-neutral-800" required>
+                  <select
+                    name="tokenType"
+                    id="tokenType"
+                    className="input border rounded-md p-2 border-neutral-800"
+                    required
+                  >
                     <option value="standard">Standard Token</option>
                     {/* <option value="liquidity" disabled>
                   Liquidity Generator Token
@@ -206,28 +222,30 @@ export default function create() {
               </label>
             </div> */}
               <div className="has-text-centered mt-6 mb-4">
-              {contractId ? (
-                <button
-                type="button"
-                onClick={callConstructor}
-                className="p-2 border border-neutral-800 rounded-full hover:bg-neutral-800 hover:text-white transition duration-300 hover:ease-in"
-              >
-                <span>Create token</span>
-              </button>
-              ) : (
-                <div className="flex flex-col w-fit">
+                {contractId ? (
                   <button
-                  disabled
-                  aria-disabled
-                  type="button"
-                  onClick={callConstructor}
-                  className="p-2 border border-gray-200 text-gray-200 rounded-full"
-                >
-                  <span>Create token</span>
-                </button>
-                <span className="text-red-500 mt-5">Your need to deploy the contract first !</span>
-                </div>
-              ) }
+                    type="button"
+                    onClick={callConstructor}
+                    className="p-2 border border-neutral-800 rounded-full hover:bg-neutral-800 hover:text-white transition duration-300 hover:ease-in"
+                  >
+                    <span>Create token</span>
+                  </button>
+                ) : (
+                  <div className="flex flex-col w-fit">
+                    <button
+                      disabled
+                      aria-disabled
+                      type="button"
+                      onClick={callConstructor}
+                      className="p-2 border border-gray-200 text-gray-200 rounded-full"
+                    >
+                      <span>Create token</span>
+                    </button>
+                    <span className="text-red-500 mt-5">
+                      Your need to deploy the contract first !
+                    </span>
+                  </div>
+                )}
               </div>
             </form>
           </div>
