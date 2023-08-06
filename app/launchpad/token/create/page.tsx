@@ -64,14 +64,14 @@ export default function create() {
 
   const deployContract = async () => {
     // load the byteCode of the contract, generated from Sway source
-    const data = await fetch("/sway_contracts/src-20/out/debug/src-20.bin");
+    const data = await fetch("/deployment/src-20.bin");
 
     // console.log(data);
     var byteCode = new Uint8Array(await data.arrayBuffer());
     const buff: BytesLike = buffer.Buffer.from(byteCode);
 
     // load the JSON abi of the contract, generated from Sway source
-    const abi: ABI = require("/sway_contracts/src-20/out/debug/src-20-abi.json");
+    const abi: ABI = require("/deployment/src-20-abi.json");
     console.log(abi);
 
     // const buff = fs.readFileSync(binFile);
